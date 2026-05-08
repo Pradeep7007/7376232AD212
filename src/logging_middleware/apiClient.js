@@ -20,7 +20,11 @@ const log = (response, error) => {
   fetch('http://localhost:5000/logs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ endpoint: config.url, status, latencyMs, timestamp: new Date().toISOString() }),
+    body: JSON.stringify(
+      { endpoint: config.url, 
+        status, latencyMs, 
+        timestamp: new Date().toISOString()
+      }),
     keepalive: true,
   }).catch(() => {});
 };
