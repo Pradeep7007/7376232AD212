@@ -19,8 +19,8 @@ app.post('/register', (req, res) => {
   if (!name || !email || !rollNumber || !github || !mobile || !accessCode) 
     return res.status(400).json({ message: 'All fields required' });
 
-  const clientID = 'client_'+Math.random(10000);
-  const clientSecret = 'secret_'+Math.random(10000);
+  const clientID = 'client_'+Math.floor(Math.random() * 100) + 1;;
+  const clientSecret = 'secret_'+Math.floor(Math.random() * 425) + 1;;
 
   clients[clientID] = { clientSecret, email, name, rollNumber };
   res.json({ clientID, clientSecret });
