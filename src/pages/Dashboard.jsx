@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Card, Typography, Button, Radio, RadioGroup, FormControlLabel, Grid, Paper, Fade } from '@mui/material';
+import { Box, Card, Typography, Button, Radio, RadioGroup, FormControlLabel, Grid, Paper } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import apiClient from '../logging_middleware/apiClient';
 
@@ -31,12 +31,12 @@ export default function Dashboard() {
   const isUrgent = timeLeft < 300;
 
   return (
-    <Box className="animate-fade-in" sx={{ mt: 2 }}>
-      <Box className="glass-card" display="flex" justifyContent="space-between" alignItems="center" p={2} mb={4}>
-        <Typography variant="h5" fontWeight="bold" sx={{ color: '#fff' }}>Assessment Dashboard</Typography>
+    <Box sx={{ mt: 3, mb: 5 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" p={2} mb={3} bgcolor="#fff" borderRadius={2} boxShadow={1}>
+        <Typography variant="h6" fontWeight="bold" color="textPrimary">Assessment Dashboard</Typography>
         <Box display="flex" alignItems="center" gap={1}>
-          <AccessTimeIcon color={isUrgent ? 'error' : 'primary'} />
-          <Typography variant="h5" color={isUrgent ? 'error.main' : 'primary.main'} fontWeight="bold" sx={{ fontFamily: 'monospace' }}>
+          <AccessTimeIcon color={isUrgent ? 'error' : 'action'} />
+          <Typography variant="h6" color={isUrgent ? 'error.main' : 'textPrimary'}>
             {Math.floor(timeLeft / 60).toString().padStart(2, '0')}:{(timeLeft % 60).toString().padStart(2, '0')}
           </Typography>
         </Box>
@@ -44,21 +44,16 @@ export default function Dashboard() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={3}>
-          <Paper className="glass-card" sx={{ p: 3, display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <Typography variant="h6" mb={2} color="textSecondary">Questions Navigator</Typography>
-            <Box display="flex" gap={1.5} flexWrap="wrap">
+          <Paper elevation={2} sx={{ p: 2, display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <Typography variant="subtitle1" mb={2} fontWeight="bold">Question Navigator</Typography>
+            <Box display="flex" gap={1} flexWrap="wrap">
               {questions.map((q, i) => (
                 <Button 
                   key={q.id} 
                   variant={idx === i ? 'contained' : answers[q.id] ? 'contained' : 'outlined'} 
                   color={idx === i ? 'primary' : answers[q.id] ? 'success' : 'inherit'}
                   onClick={() => setQData({ ...qData, idx: i })}
-                  sx={{ 
-                    minWidth: '45px', 
-                    height: '45px', 
-                    borderRadius: '50%',
-                    boxShadow: idx === i ? '0 0 15px rgba(0,229,255,0.6)' : 'none'
-                  }}
+                  sx={{ minWidth: '40px', height: '40px', borderRadius: 1 }}
                 >
                   {i + 1}
                 </Button>
@@ -67,53 +62,49 @@ export default function Dashboard() {
           </Paper>
         </Grid>
         <Grid item xs={12} md={9}>
-          <Fade in={true} key={idx}>
-            <Card className="glass-card" sx={{ p: 4, minHeight: '400px', display: 'flex', flexDirection: 'column' }}>
-              <Box mb={4}>
-                <Typography variant="subtitle1" color="primary" mb={1} fontWeight="bold">Question {idx + 1} of {questions.length}</Typography>
-                <Typography variant="h5" sx={{ lineHeight: 1.6 }}>{currentQ.text}</Typography>
-              </Box>
+          <Card elevation={2} sx={{ p: 3, display: 'flex', flexDirection: 'column', minHeight: '350px' }}>
+            <Box mb={3}>
+              <Typography variant="subtitle2" color="textSecondary" mb={1}>Question {idx + 1} of {questions.length}</Typography>
+              <Typography variant="h6" fontWeight="normal">{currentQ.text}</Typography>
+            </Box>
 
-              <RadioGroup 
-                value={answers[currentQ.id] || ''} 
-                onChange={e => setQData({ ...qData, answers: { ...answers, [currentQ.id]: e.target.value } })}
-                sx={{ flexGrow: 1 }}
-              >
-                {currentQ.options.map(opt => (
-                  <FormControlLabel 
-                    key={opt} 
-                    value={opt} 
-                    control={<Radio color="primary" />} 
-                    label={<Typography variant="body1" sx={{ ml: 1, py: 1 }}>{opt}</Typography>} 
-                    sx={{ 
-                      mb: 2, 
-                      p: 1, 
-                      borderRadius: 2, 
-                      border: '1px solid rgba(255,255,255,0.1)', 
-                      backgroundColor: answers[currentQ.id] === opt ? 'rgba(0,229,255,0.1)' : 'transparent',
-                      transition: 'all 0.2s',
-                      '&:hover': { backgroundColor: 'rgba(255,255,255,0.05)' }
-                    }}
-                  />
-                ))}
-              </RadioGroup>
+            <RadioGroup 
+              value={answers[currentQ.id] || ''} 
+              onChange={e => setQData({ ...qData, answers: { ...answers, [currentQ.id]: e.target.value } })}
+              sx={{ flexGrow: 1 }}
+            >
+              {currentQ.options.map(opt => (
+                <FormControlLabel 
+                  key={opt} 
+                  value={opt} 
+                  control={<Radio color="primary" />} 
+                  label={<Typography variant="body1">{opt}</Typography>} 
+                  sx={{ 
+                    mb: 1, 
+                    p: 1, 
+                    borderRadius: 1, 
+                    border: '1px solid #e0e0e0', 
+                    backgroundColor: answers[currentQ.id] === opt ? '#f0f7ff' : 'transparent'
+                  }}
+                />
+              ))}
+            </RadioGroup>
 
-              <Box mt={4} pt={3} borderTop="1px solid rgba(255,255,255,0.1)" display="flex" justifyContent="space-between">
-                <Button variant="outlined" disabled={idx === 0} onClick={() => setQData({ ...qData, idx: idx - 1 })} sx={{ px: 4 }}>
-                  Previous
+            <Box mt={4} pt={2} borderTop="1px solid #e0e0e0" display="flex" justifyContent="space-between">
+              <Button variant="outlined" disabled={idx === 0} onClick={() => setQData({ ...qData, idx: idx - 1 })}>
+                Previous
+              </Button>
+              {idx < questions.length - 1 ? (
+                <Button variant="contained" color="primary" onClick={() => setQData({ ...qData, idx: idx + 1 })}>
+                  Save & Next
                 </Button>
-                {idx < questions.length - 1 ? (
-                  <Button variant="contained" className="btn-glow" onClick={() => setQData({ ...qData, idx: idx + 1 })} sx={{ px: 4 }}>
-                    Save & Next
-                  </Button>
-                ) : (
-                  <Button variant="contained" color="secondary" className="btn-glow" onClick={handleSubmit} sx={{ px: 4, boxShadow: '0 4px 14px 0 rgba(245,0,87,0.4)' }}>
-                    Submit Assessment
-                  </Button>
-                )}
-              </Box>
-            </Card>
-          </Fade>
+              ) : (
+                <Button variant="contained" color="error" onClick={handleSubmit}>
+                  Submit Test
+                </Button>
+              )}
+            </Box>
+          </Card>
         </Grid>
       </Grid>
     </Box>

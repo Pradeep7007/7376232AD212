@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { Box, Card, CardContent, Typography, TextField, Button, Link, Alert, Fade } from '@mui/material';
+import { Box, Card, CardContent, Typography, TextField, Button, Link, Alert } from '@mui/material';
 import apiClient from '../logging_middleware/apiClient';
 
 export default function Register() {
@@ -21,17 +21,17 @@ export default function Register() {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh" className="animate-fade-in">
-      <Card className="glass-card" sx={{ maxWidth: 700, width: '100%', p: 3, mb: 4 }}>
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh" py={4}>
+      <Card elevation={3} sx={{ maxWidth: 700, width: '100%', p: 2 }}>
         <CardContent>
-          <Typography variant="h4" align="center" mb={1} color="primary" sx={{ textShadow: '0 2px 10px rgba(0,229,255,0.3)' }}>
-            Join the Program
+          <Typography variant="h5" align="center" mb={1} color="primary" fontWeight="bold">
+            Registration Form
           </Typography>
-          <Typography variant="body1" align="center" mb={4} color="textSecondary">
-            Enter your details to get your unique credentials.
+          <Typography variant="body2" align="center" mb={3} color="textSecondary">
+            Please fill out all fields to generate your credentials.
           </Typography>
 
-          {error && <Fade in={!!error}><Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert></Fade>}
+          {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
           
           {!credentials ? (
             <form onSubmit={handleSubmit}>
@@ -43,32 +43,30 @@ export default function Register() {
                     label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')} 
                     name={key} 
                     margin="none" 
+                    size="small"
                     onChange={e => setFormData({ ...formData, [key]: e.target.value })} 
                     required 
-                    sx={{ mb: 1 }}
                   />
                 ))}
               </Box>
-              <Button type="submit" variant="contained" className="btn-glow" fullWidth sx={{ mt: 4, py: 1.5, fontSize: '1.1rem' }}>
-                Register Now
+              <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3, py: 1.2 }}>
+                Register
               </Button>
-              <Box textAlign="center" mt={3}>
-                <Link component={RouterLink} to="/login" sx={{ color: 'primary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
+              <Box textAlign="center" mt={2}>
+                <Link component={RouterLink} to="/login" variant="body2" sx={{ textDecoration: 'none' }}>
                   Already have an account? Login here
                 </Link>
               </Box>
             </form>
           ) : (
-            <Fade in={true}>
-              <Box textAlign="center">
-                <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>Registration Successful! Save these details securely.</Alert>
-                <TextField fullWidth label="Client ID" value={credentials.clientID} margin="normal" InputProps={{ readOnly: true }} sx={{ mb: 2 }} />
-                <TextField fullWidth label="Client Secret" value={credentials.clientSecret} margin="normal" InputProps={{ readOnly: true }} />
-                <Button variant="contained" color="secondary" className="btn-glow" fullWidth sx={{ mt: 4, py: 1.5 }} onClick={() => navigate('/login')}>
-                  Proceed to Login
-                </Button>
-              </Box>
-            </Fade>
+            <Box textAlign="center">
+              <Alert severity="success" sx={{ mb: 3 }}>Registration Successful! Please save the details below securely.</Alert>
+              <TextField fullWidth label="Client ID" value={credentials.clientID} margin="normal" InputProps={{ readOnly: true }} />
+              <TextField fullWidth label="Client Secret" value={credentials.clientSecret} margin="normal" InputProps={{ readOnly: true }} />
+              <Button variant="contained" color="primary" fullWidth sx={{ mt: 3, py: 1.2 }} onClick={() => navigate('/login')}>
+                Proceed to Login
+              </Button>
+            </Box>
           )}
         </CardContent>
       </Card>
