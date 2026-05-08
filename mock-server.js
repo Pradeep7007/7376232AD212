@@ -16,9 +16,12 @@ const questionsDB = [
 
 app.post('/register', (req, res) => {
   const { name, email, rollNumber, github, mobile, accessCode } = req.body;
-  if (!name || !email || !rollNumber || !github || !mobile || !accessCode) return res.status(400).json({ message: 'All fields required' });
-  const clientID = 'client_' + Math.random().toString(36).substr(2, 9);
-  const clientSecret = 'secret_' + Math.random().toString(36).substr(2, 15);
+  if (!name || !email || !rollNumber || !github || !mobile || !accessCode) 
+    return res.status(400).json({ message: 'All fields required' });
+
+  const clientID = 'client_'+Math.random(10000);
+  const clientSecret = 'secret_'+Math.random(10000);
+
   clients[clientID] = { clientSecret, email, name, rollNumber };
   res.json({ clientID, clientSecret });
 });
