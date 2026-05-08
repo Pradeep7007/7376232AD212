@@ -19,7 +19,7 @@ export default function Login() {
 
   return (
     <Box display="flex" justifyContent="center">
-      <Card sx={{ maxWidth: 500, width: '100%', p: 2 }}>
+      <Card sx={{ maxWidth: 700, width: '100%', p: 2, mb:4 }}>
         <CardContent>
           <Typography variant="h5" align="center" mb={2}>Login</Typography>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
