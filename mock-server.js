@@ -9,18 +9,29 @@ const clients = {}, validTokens = new Set();
 let latestResults = null;
 
 const questionsDB = [
-  { id: 'q1', text: "What is the primary function of a logging middleware?", options: ["Data Storage", "Tracking Requests", "Styling UI", "Routing"], correctAnswer: "Tracking Requests" },
-  { id: 'q2', text: "Explain the purpose of an Axios interceptor.", options: ["Modifying requests/responses globally", "Connecting to a database", "Rendering components", "Running unit tests"], correctAnswer: "Modifying requests/responses globally" },
-  { id: 'q3', text: "Which hook is used for side effects in React?", options: ["useState", "useEffect", "useMemo", "useContext"], correctAnswer: "useEffect" }
+  { id: 'q1', text: "What is the primary function of a logging middleware?",
+    options: ["Data Storage", "Tracking Requests", "Styling UI", "Routing"], 
+    correctAnswer: "Tracking Requests" },
+
+  { id: 'q2', text: "Explain the purpose of an Axios interceptor.",
+    options: ["Modifying requests/responses globally", "Connecting to a database", "Rendering components", "Running unit tests"],
+    correctAnswer: "Modifying requests/responses globally" },
+
+  { id: 'q3', text: "Which hook is used for side effects in React?",
+    options: ["useState", "useEffect", "useMemo", "useContext"],
+    correctAnswer: "useEffect" }
 ];
 
 app.post('/register', (req, res) => {
   const { name, email, rollNumber, github, mobile, accessCode } = req.body;
   if (!name || !email || !rollNumber || !github || !mobile || !accessCode) 
-    return res.status(400).json({ message: 'All fields required' });
+    return res.status(400).json({ message:"All the fields are required" });
+
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
   const clientID = 'client_'+Math.floor(Math.random() * 100) + 1;;
-  const clientSecret = 'secret_'+Math.floor(Math.random() * 425) + 1;;
+  
+  const clientSecret = 'secret_'+ Math.floor(Math.random() * chars.length);
 
   clients[clientID] = { clientSecret, email, name, rollNumber };
   res.json({ clientID, clientSecret });
